@@ -1,0 +1,81 @@
+{% extends 'html/base.html' %}
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+    }
+
+    h1 {
+        text-align: center;
+        padding: 20px;
+    }
+
+    table {
+        width: 80%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        background-color: white;
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    td[colspan="4"] {
+        text-align: center;
+    }
+
+    /* Style odd and even rows with different background colors */
+    tr:nth-child(odd) {
+        background-color: #f7f7f7;
+    }
+
+    /* Add a border to table rows */
+    tr {
+        border: 1px solid #ddd;
+    }
+</style>
+
+    
+   
+</head>
+<body>
+    <h1>Weekly Reports</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Review</th>
+                <th>Ratings</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.department }}</td>
+                    <td>{{ item.review }}</td>
+                    <td>{{ item.rating }}/5</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No weekly reports available for the current week.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+
+{% endblock %}

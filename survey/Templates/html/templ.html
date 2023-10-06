@@ -1,0 +1,104 @@
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.conf import settings
+from .models import Review
+
+def form(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        department = request.POST['department']
+        review_text = request.POST['review']
+        rating = request.POST.get('rating[]')
+
+        # Create and save the review
+        review = Review.objects.create(name=name, department=department, review=review_text, rating=rating)
+
+        # Prepare context data for the email template
+        email_context = {
+            'name': name,
+            'department': department,
+            'rating': rating,
+            'review_text': review_text,
+        }
+
+        # Load the email template
+        with open('your_app/templates/email_template.html') as f:
+            email_message = f.read()
+
+        # Replace placeholders in the template with actual values
+        for key, value in email_context.items():
+            email_message = email_message.replace('{{ ' + key + ' }}', value)
+
+        # Send an email
+        subject = 'New Review Submitted'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [request.user.email]  # Replace with the email address where you want to receive notifications
+
+        send_mail(subject, '', from_email, recipient_list, html_message=email_message)
+
+        # Redirect to a thank-you page or the same page after submission
+        return redirect('dashboard')
+
+    return render(request, 'html/form.html')
+
+
+
+
+    def download_excel(request):
+    # Your code to fetch data from the database (replace this with your data retrieval logic)
+    # For example, if you have a Review model:
+    reviews = Review.objects.all()
+
+    # Create a DataFrame with your data
+    # Replace 'reviews' and column names with your actual data
+    data = {
+        'Name': [review.name for review in reviews ],
+        'Department': [review.department for review in reviews],
+        'Review': [review.review for review in reviews],
+        'Ratings': [review.rating for review in reviews],
+    }
+    df = pd.DataFrame(data)
+
+    # Create an Excel writer object
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="report.xlsx"'
+    writer = pd.ExcelWriter(response, engine='openpyxl')
+
+    # Convert the DataFrame to an Excel object
+    df.to_excel(writer, sheet_name='Sheet1', index=False)
+
+    # Save the Excel file
+    writer.save()
+    return response
+
+
+
+
+
+
+
+
+
+    def form(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        department = request.POST['department']
+        review_text = request.POST['review']
+        rating = request.POST.get('rating[]')
+
+        # Create and save the review
+        review = Review.objects.create(name=name, department=department, review=review_text, rating=rating)
+
+        # Send an email
+        subject = 'New Review Submitted'
+        message = f'A new review has been submitted by {name}. Department: {department}, Rating: {rating}, Review: {review_text}'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [request.user.email]  # Replace with the email address where you want to receive notifications
+
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+
+        # Redirect to a thank-you page or the same page after submission
+        return redirect('dashboard')
+
+    return render(request, 'html/form.html')
+

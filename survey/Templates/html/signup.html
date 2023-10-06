@@ -1,0 +1,114 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>SignUp</title>
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!-- Font-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signup/css/opensans-font.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'signup/fonts/line-awesome/css/line-awesome.min.css' %}">
+	<!-- Jquery -->
+	<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+	<!-- Main Style Css -->
+    <link rel="stylesheet" href="{% static 'signup/css/style.css' %}">
+    <style>
+        /* Style for error message */
+        .error-message {
+            color: red;
+            display: none; /* Initially hide it */
+        }
+    </style>
+</head>
+<body class="form-v7">
+	<div class="page-content">
+		<div class="form-v7-content">
+			<div class="form-left">
+				<img src="{% static 'signup/images/form-v7.jpg' %}" alt="form">
+				<p class="text-1">Sign Up</p>
+				<p class="text-2">Privacy policy & Term of service</p>
+			</div>
+			<form class="form-detail" action="{% url 'signup' %}" method="post" id="registration-form">
+				{% csrf_token %}
+				<div class="form-row">
+					<label for="username">USERNAME</label>
+					<input type="text" name="username" id="username" class="input-text">
+				</div>
+				<div class="form-row">
+					<label for="your_email">E-MAIL</label>
+					<input type="text" name="your_email" id="your_email" class="input-text" required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}">
+				</div>
+				<div class="form-row">
+					<label for="password">PASSWORD</label>
+					<input type="password" name="password" id="password" class="input-text" required>
+				</div>
+				<div class="form-row">
+					<label for="confirm_password">CONFIRM PASSWORD</label>
+					<input type="password" name="confirm_password" id="confirm_password" class="input-text" required>
+				</div>
+				<!-- Error message div -->
+				<div class="error-message">Invalid username or password.</div>
+				<div class="form-row-last">
+					<input type="submit" name="register" class="register" value="Register">
+					<p>Or<a href="{% url 'login' %}">Sign in</a></p>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Function to show error message
+			function showError() {
+				$(".error-message").css("display", "block");
+			}
+	
+			// Function to hide error message
+			function hideError() {
+				$(".error-message").css("display", "none");
+			}
+	
+			// Initialize the form validation
+			$("#registration-form").validate({
+				rules: {
+					your_email: {
+						required: true,
+						email: true
+					},
+					password: "required",
+					confirm_password: {
+						equalTo: "#password"
+					}
+				},
+				messages: {
+					username: {
+						required: "Please enter a username"
+					},
+					your_email: {
+						required: "Please provide an email"
+					},
+					password: {
+						required: "Please provide a password"
+					},
+					confirm_password: {
+						required: "Please provide a password",
+						equalTo: "Passwords do not match"
+					}
+				},
+				errorPlacement: function(error, element) {
+					// Call showError when validation fails
+					showError();
+				},
+				success: function() {
+					// Call hideError when validation succeeds
+					hideError();
+				}
+			});
+		});
+	</script>
+</body>
+</html>

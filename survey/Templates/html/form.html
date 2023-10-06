@@ -1,0 +1,154 @@
+
+{% extends 'html/base.html' %}
+{% block content %}
+
+<style>
+    /* Styles for the outer container to center the form */
+    .outer-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Full viewport height */
+    }
+
+    /* Styles for the form container */
+    .form-container {
+        position: relative;
+        text-align: center;
+        width: 80%;
+        max-width: 600px; /* Increased maximum width for the form */
+        padding: 20px 40px; /* Increase padding on the right side */
+        background-color: #f7f7f7;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Styles for the close button */
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    /* Styles for form elements */
+    .form-container label {
+        display: block;
+        text-align: left;
+        margin-bottom: 10px;
+    }
+
+    .form-container input[type="text"],
+    .form-container textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    /* Styles for star rating */
+    .star-rating {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .star-rating input[type="checkbox"] {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 24px;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .star-rating label:before {
+        content: "\2605"; /* Star symbol */
+        display: block;
+        color: #ccc;
+    }
+
+    .star-rating input[type="checkbox"]:checked + label:before {
+        color: #FFD700; /* Gold star color */
+    }
+
+    /* Styles for the submit button */
+    .form-container button[type="submit"],
+    .form-container button[type="button"] {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .form-container button[type="submit"]:hover,
+    .form-container button[type="button"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<body>
+    <div class="outer-container">
+        <div class="form-container" id="reviewFormContainer">
+            <button class="close-button" id="closeForm">&#10006;</button>
+            <h2>Leave a Review</h2>
+             <form action="{% url 'form' %}" method="post" id="reviewForm">
+                {% csrf_token %}
+
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="department">Department:</label>
+                <input type="text" id="department" name="department" required>
+
+                <label for="review">Review:</label>
+                <textarea id="review" name="review" rows="4" required></textarea>
+
+                <label for="rating">Rating:</label>
+                <div class="star-rating">
+                    <input type="checkbox" id="star5" name="rating[]" value="5">
+                    <label for="star5"></label>
+                    <input type="checkbox" id="star4" name="rating[]" value="4">
+                    <label for="star4"></label>
+                    <input type="checkbox" id="star3" name="rating[]" value="3">
+                    <label for="star3"></label>
+                    <input type="checkbox" id="star2" name="rating[]" value="2">
+                    <label for="star2"></label>
+                    <input type="checkbox" id="star1" name="rating[]" value="1">
+                    <label for="star1"></label>
+                </div>
+
+                <button type="submit">Submit</button>
+                <button type="button" id="cancelButton">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    
+</body>
+
+{% endblock %}
+<script>
+    const closeFormButton = document.getElementById('closeForm');
+    const reviewFormContainer = document.getElementById('reviewFormContainer');
+    const cancelButton = document.getElementById('cancelButton');
+
+    closeFormButton.addEventListener('click', () => {
+        reviewFormContainer.style.display = 'none';
+        window.location.href = '/dashboard/';
+    });
+
+    cancelButton.addEventListener('click', () => {
+        reviewFormContainer.style.display = 'none';
+        window.location.href ='/dashboard/';
+    });
+</script>
